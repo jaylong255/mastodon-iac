@@ -24,3 +24,24 @@ Again, no one has contributed to this in 6 years. So either not much has changed
 
 This one may be GOLD. I'm about to try and launch it on my own account. 
 
+---
+
+## Folder Structure
+
+
+## Network
+
+The following module is a versitile and popular solution in the Terraform community for launching network infrastructure on GCP.
+
+`terraform-google-modules/network/google`
+
+[Terraform Network Module](https://registry.terraform.io/modules/terraform-google-modules/network/google/latest)
+
+![VPC](images/gcp-vpc-chart.png)
+
+## Firewalls
+
+## Kubernetes
+
+![GKE Cluster](images/gcp-k8s-chart.png)
+
