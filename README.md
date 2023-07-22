@@ -26,7 +26,36 @@ This one may be GOLD. I'm about to try and launch it on my own account.
 
 ---
 
-## Folder Structure
+## Folder and Project Structure
+The trick here is to organize projects into folders that allow us to have a highly privileged Terraform agent across all projects managed by IaC, while keeping it from being able to self-escalate its own permissions beyond its sandbox and thus throughout the entire GCP account.
+
+```bash
+# Folder / Project Structure and Service Accounts
+
+📁 Terraform-Managed-Resources (Folder)
+├── 📁 Terraform-Managed-Projects (Folder)
+│   ├── 📁 My-App (Folder)
+│   │   └── 🚀 My-App (Project)
+│   │   │   ├── 👤 Resource1 (Service Account)
+│   │   │   └── 👤 Resource2 (Service Account)
+│   └── 📁 My-App-Dev (Folder)
+│   │   ├── 🚀 My-App-Staging (Project)
+│   │   │   └── 👤 Resource1 (Service Account)
+│   │   ├── 🚀 My-App-PR-456 (Project)
+│   │   │   └── 👤 Resource1 (Service Account)
+│   │   └── 🚀 My-App-PR-123 (Project)
+│   │   │   └── 👤 Resource1 (Service Account)
+│   ├── 📁 Some-Other-App (Folder)
+│   │   └── 🚀 Some-Other-App (Project)
+│   │   │   └── 👤 Resource1 (Service Account)
+│   └── 📁 My-App-Dev (Folder)
+│       ├── 🚀 Some-Other-App-Staging (Project)
+│       │   └── 👤 Resource1 (Service Account)
+│       └── 🚀 Some-Other-App-PR-678 (Project)
+│           └── 👤 Resource1 (Service Account)
+└── 🚀 Terraform-Agents
+    └── 👤 Terraform (Service Account)
+```
 
 
 ## Network
