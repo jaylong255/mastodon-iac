@@ -68,9 +68,31 @@ The following module is a versitile and popular solution in the Terraform commun
 
 ![VPC](images/gcp-vpc-chart.png)
 
+### NAT IP
+
+### Cloud Router
+
+### Cloud NAT
+
 ## Firewalls
+
+### Firewall IAP
+
+## Service Accounts
+
+### Monitoring and Backups
+
+### Workload Identity User
+
+### Monitoring Bucket
+
+### Storage Bucket
+
+### Keyring
 
 ## Kubernetes
 
 ![GKE Cluster](images/gcp-k8s-chart.png)
+
+### 
 
