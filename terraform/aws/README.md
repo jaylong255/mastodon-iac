@@ -9,11 +9,30 @@ The objective of this document is to outline the overall architecture and techni
 
 > By expressing all of our resources as code, you will be able to quickly duplicate identical infrastructure, your ability to track what changes have been made will be near instant and automated, and your time will likely gain a deeper insight and understanding into how all of your resources work together to power your app.
 
+## Useful Links
+
+[How to Boost Mastodon Server Performance with Redis](https://thenewstack.io/how-to-boost-mastodon-server-performance-with-redis/)
+
+![Mastodon Architecture with Redis](../../images/mastodon-redis-example.png)
+
+[Deploy a Mastodon instance - Example with Terraform and AWS](https://medium.com/@aureliendemilly/deploy-a-mastodon-instance-aec81d17f18a)
+
+[The GitHub Repo for the TF Module Used in the Above Blog](https://github.com/ademilly/mastodon-aws-terraform)
+
 ## Architecture Overview
 
 The architecture for the elastic high-availability Mastodon instance on AWS will consist of the following components:
 
 1. **AWS Fargate**: This serverless compute engine will orchestrate containerized Mastodon application instances, enabling auto-scaling and high availability.
+
+    [Docker Compose Example for Reference](https://github.com/mastodon/mastodon/blob/main/docker-compose.yml) See examples of the common services that a containerized Mastodon instance depends on. 
+    
+    Apart from Postgres and Redis, we will also need to run independent, stateless ECS container clusters that power
+    
+    1. A Rails service to run the Mastodon app
+    2. A Node.js service for streaning.
+    3. And potentially a service for Sidekiq for if we don't use an AWS service for job processing.
+
 
 2. **Amazon RDS (Relational Database Service)**: A fully managed PostgreSQL database service for the Mastodon application backend. Configure your app to support readonly replica endpoints for horizontal scaling of readers. Set thresholds to scale the writer vertically.
 
@@ -29,10 +48,18 @@ The architecture for the elastic high-availability Mastodon instance on AWS will
 
 8. **Amazon VPC (Virtual Private Cloud)**: All resources will be deployed within a custom VPC network to ensure isolation and security.
 
+    `terraform-aws-modules/terraform-aws-vpc`
+
+    [Terraform Network Module | The GitHub Repo for the TF Module Used in the Above Blog](https://github.com/ademilly/mastodon-aws-terraform)
+
+
+
 9. **Security Groups**: Network security groups will be configured to control traffic between services and secure access points.
 
 10. **Secrets Manager**: Manage secure encrypted environment variables in the secret store for quick, secure retrieval when service clusters launch.
 
+
+11. **Event Bridge Task Management** Many implementations run a sidekiq service running on its own container cluster. We may consider using Event Bridge serivce for this. I'm not 100% sure which is best. It needs to scale, though. Job processing is a potential bottleneck for a Mastodon instance when scaling.
 
 > **A few words on state:** One way of thinking about your infrastructure while you are planning your app is to consider where state is managed and keep it decoupled from your application codebase containers. Anything that stores a file, saves a session, persists data or otherwise manages any type of state needs to be done outside of the app container and in an elastic resource.  
 
